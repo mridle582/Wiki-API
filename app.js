@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({
 
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://localhost:27017/wikiDB");
+mongoose.connect("mongodb://0.0.0.0:27017/wikiDB");
 
 const articlesSchema = {
     title: String,
@@ -21,6 +21,14 @@ const articlesSchema = {
 };
 
 const Article = mongoose.model("Article", articlesSchema);
+
+app.get("/", (req, res) => {
+    Article.find({}, (err, foundArticles) => {
+        err ? console.log(err) : console.log(foundArticles);
+    });
+    res.render("home");
+});
+
 
 app.listen(3000, () => {
     console.log("Server started on port 3000");
