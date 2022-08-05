@@ -54,16 +54,15 @@ app.route("/articles")
 /////////////////////////Individual Articles///////////////////////////////////
 
 
-app.route("/articles/:articleName")
+app.route("/articles/:articleTitle")
 
     .get((req, res) => {
-        const artName = req.params.articleName;
         Article.findOne({
-            title: artName
+            title: req.params.articleTitle
         }, (err, foundDoc) => {
             if (!err) {
                 if (!foundDoc) {
-                    res.send(`Oh no! No Articles with name \"${artName}\" in \
+                    res.send(`Oh no! No Articles with name \"${req.params.articleTitle}\" in \
                         Database. Please check your spelling and try again.`);
                 } else {
                     res.send(foundDoc);
@@ -72,6 +71,32 @@ app.route("/articles/:articleName")
                 res.send(err);
             }
         });
+    })
+
+    .put((req, res) => {
+        Article.findOneAndUpdate({
+                title: req.params.articleTitle
+            }, {
+                title: req.body.title,
+                content: req.body.content
+            }, {
+                // False By default
+                overwrite: true
+            },
+            (err) => {
+                err ? res.send(err) : res.send("Successfully updated Article.");
+            });
+    })
+
+    .patch((req, res) => {
+        Article.findOneAndUpdate({
+                title: req.params.articleTitle
+            }, {
+                $set: req.body
+            },
+            (err) => {
+                err ? res.send(err) : res.send("Successfully patched Article.");
+            });
     })
 
 
