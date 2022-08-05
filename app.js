@@ -29,12 +29,9 @@ app.route("/articles")
         });
     })
     .post((req, res) => {
-        const reqTitle = req.body.title;
-        const reqContent = req.body.content;
-        // console.log({reqTitle, reqContent});
         const reqArticle = new Article({
-            title: reqTitle,
-            content: reqContent
+            title: req.body.title,
+            content: req.body.content
         });
         reqArticle.save((err) => {
            err ? res.send(err) : res.send("Successfully added new Article.");
