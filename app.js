@@ -22,11 +22,10 @@ const articlesSchema = {
 
 const Article = mongoose.model("Article", articlesSchema);
 
-app.get("/", (req, res) => {
+app.get("/articles", (req, res) => {
     Article.find({}, (err, foundArticles) => {
-        err ? console.log(err) : console.log(foundArticles);
+        err ? res.send(err) : res.send(foundArticles);
     });
-    res.render("home");
 });
 
 
